@@ -4,6 +4,7 @@ module Sprockets
   module Helpers
     module RailsHelper
       def javascript_include_tag(*sources)
+        binding.pry
         if enforce_precompile?
           sources_without_options(sources).each do |source|
             ensure_asset_will_be_precompiled!(source, 'js')
