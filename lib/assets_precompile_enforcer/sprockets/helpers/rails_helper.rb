@@ -3,21 +3,25 @@ require 'sprockets/helpers/rails_helper'
 module Sprockets
   module Helpers
     module RailsHelper
-      def javascript_include_tag_with_enforced_precompile(*sources)
-        sources_without_options(sources).each do |source|
-          ensure_asset_will_be_precompiled!(source, 'js') if enforce_precompile?
+      def javascript_include_tag(*sources)
+        if enforce_precompile?
+          sources_without_options(sources).each do |source|
+            ensure_asset_will_be_precompiled!(source, 'js')
+          end
         end
-        javascript_include_tag_without_enforced_precompile(*sources)
-      end
-      alias_method_chain :javascript_include_tag, :enforced_precompile
 
-      def stylesheet_link_tag_with_enforced_precompile(*sources)
-        sources_without_options(sources).each do |source|
-          ensure_asset_will_be_precompiled!(source, 'css') if enforce_precompile?
-        end
-        stylesheet_link_tag_without_enforced_precompile(*sources)
+        super *sources
       end
-      alias_method_chain :stylesheet_link_tag, :enforced_precompile
+
+      def stylesheet_link_tag(*sources)
+        if enforce_precompile?
+          sources_without_options(sources).each do |source|
+            ensure_asset_will_be_precompiled!(source, 'css')
+          end
+        end
+
+        super *sources
+      end
 
 
       private
